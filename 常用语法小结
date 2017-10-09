@@ -1,5 +1,5 @@
 1.利用内建isinstance和basestring来判断是否字符串-------判断类型
-  def isAString(anobj):          #优先使用
+  def adj_isString(anobj):          #优先使用
        return isinstance(anobj,basestring)
-  def isExactlyAstring(anobj):   #这种就比较low  当然也可以使用
+  def adj_isString(anobj):   #这种就比较low  当然也可以使用
        return type(anobj) is type('')
