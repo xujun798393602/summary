@@ -10,7 +10,37 @@ b.通过获取相应头的方式来获取-----（此方法待验证，还没尝�
 c.通过selenium登录网页，然后共享cookie给request库，（该方法得百度，还没尝试）
 
 
+3.NTLK文本分析步骤总结：
+    要点:
+    1. selenium  取 body.text  或者 requests 取 返回的代码
+    2. 了解 snownlp  方法用法   该模块可以识别哪些词语是积极的，哪些属于消极评价的
+    #遍历记录 ,每条记录的结构示例如下:{"content":"这是我买的第四部手机","createDate":"2017-08-19 11:17","custId":150086,"custName":"Z***g","custNameStatus":3,"gradeCode":3,"id":4941161,"labelList":["分辨率高","画质细腻","系统流畅","照相给力","长久续航"],"msgReplyList":[{"id":870906,"isSystemAdmin":"1","isshow":"1","replyContent":"这么好用的手机，当然值得您一次次选择，有您的支持真好~","replyTime":"2017-08-19 17:29:06","replyerGradeName":"0","replyerId":969,"replyerName":"华为商城","replyerloginName":"华为商城"}],"productId":"738677717","remarkLevel":"好评","score":5}
+    for record in record_list:
+        positive_degree = SnowNLP(record["content"]).sentiments # 正向评价度,在0~1.0之间, 靠近0为负面评价,靠近1为正面评价
+        if positive_degree < 0.5:
+            negative_num += 1
+            record["positive"] = 0 #消极
+        else:
+            positive_num += 1
+            record["positive"] = 1 #积极
+    3. 了解 jieba 分词模块的用法 该模块可以进行分词操作   在使用jieba 分词时,出现了"，"," 。", "！","我"等单个字的分词,也就是去停词的操作
 
-
+    # 将字典转为列表,例如:[("画面",10), ("快",20)]
+    word_list = list(word_dict.items())
+    # 因为1个汉字不能表达足够的意思,所以过滤掉
+    word_list = list(filter(lambda x: len(x[0]) > 1, word_list))
+    # 对列表中按统计次数降序排列
+    word_list.sort(key=lambda word_num : word_num[1], reverse=True)
+    # 将列表中的前50个单词进行输出
+    print(convert_code("根据(%s)统计,出现最多的50个关键词:" % record_field_name ))
+    print(",".join([ x[0] for x in word_list[0:50]]))
+    
+    def convert_code(src_str):
+    """对utf-8源码文件中的汉字串进行转码,否则在python2中出现乱码"""
+    import sys
+    if sys.version_info.major == 2:
+        return unicode(src_str.decode("utf-8"))
+    else:
+        return src_str
 
 
