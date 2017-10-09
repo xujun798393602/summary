@@ -1,0 +1,16 @@
+
+1. 获取网页响应头的常用操作方法：
+req=urllib2.Request('URL')
+page=urllib2.urlopen(req)
+page.info().getheaders('Server')  //此处要根据网页的具体关键字来填充
+
+2.获得cookie的方法
+a.手动获取，直接在浏览器中，按住F12然后刷新网页在Internet选项中去复制对应的cookie即可
+b.通过获取相应头的方式来获取-----（此方法待验证，还没尝试）
+c.通过selenium登录网页，然后共享cookie给request库，（该方法得百度，还没尝试）
+
+
+
+
+
+
