@@ -1,0 +1,170 @@
+#_*_coding:utf-8_*_
+
+import sys
+import os
+import time
+import gzip
+import tarfile
+import re
+
+# '''
+# 解压方法参考百度，常用的解压有三种方法，
+# 现在采用两种方法来解压文件来做学习测试
+# '''
+
+KeyWord=['xxxx1','xxxx2']
+
+def Filelist(path='./',allfile=[]):
+    '''
+    方法一：递归调用
+    功能：列举当前文件夹下所有子文件夹下所有文件
+    eg:  xx=Filelist('C:/Users/xxxx/Desktop/qwertyu')
+         print xx
+    path:默认路径是当前文件所在文件夹所在路径
+    '''
+    filelist=os.listdir(path)
+    for filename in filelist:
+        filepath=os.path.join(path,filename)
+        if os.path.isdir(filepath):
+            Filelist(filepath,allfile)
+        else:
+            allfile.append(filepath)
+    return allfile
+
+
+
+def extractGZFile(files=[]):
+    '''
+    file:要解压的文件  默认路径是当前路径，如需改变路径，再文件名前面包含路径即可
+    DesDIR：将文件加压到DesDIR
+    '''
+
+    remark='_OK'
+    # if not os.path.exists(DesDIR): #设置.tar压缩包解压后存储路径   将其屏蔽掉，直接解压到当前目录  许君 2017-08-26
+    #     os.mkdir(DesDIR)
+    # else:
+    #     pass
+
+    if files:   #列表不为空
+        try:
+            for file in files:
+                print('test------GZ------menue',file)
+                f_name=file.replace(".gz","")+remark#获取压缩包文件名
+                print('f_name  000000',f_name)
+                un_file=gzip.GzipFile(file)  #创建zip对象
+                open(f_name,"w+").write(un_file.read())
+                un_file.close()
+        except:
+            print("--Windows path must use '/' to replace '\'-----------GZ fail")
+
+def extractTARGZFile(files=[]):
+    '''
+    file:要解压的文件  默认路径是当前路径，如需改变路径，再文件名前面包含路径即可
+    '''
+
+    remark='_OK'
+
+    if files:   #列表不为空
+        try:
+            for file in files:
+                print('test-----TAR_GZ-------menue',file)
+
+                DIR_name=file.replace(".tar.gz","")#获取压缩包文件名
+                tar=tarfile.open(file)
+                tar.extractall(path=DIR_name)
+                tar.close()
+
+                #--------------------------方法一   测试可行
+                remark='_OK'
+                print ('tar gz----DIR_name',DIR_name)
+
+        except:
+            print("--Windows path must use '/' to replace '\'-----------GZ fail")
+
+
+def SearchKeyWord(key={},CurFile=[]):
+    '''
+    key----输入需要查找的关键字  一次最多查询5个单词
+    CurFile-----在当前的文件中查找关键字
+    row--------关键字所在的行号
+    '''
+    KeyWords=key.keys()
+    print('--------------KeyWords------88888888888888-------')
+    print(KeyWords)
+    print(key)
+    print('--------------KeyWords------88888888888888-------')
+
+    for i in KeyWords:  #键值赋初值操作
+        key[i]=0
+
+    seekfile=CurFile
+    with open("KeywordTable.txt",'w+') as f_save: #设置存储存储结果文件
+        for file_open in seekfile:
+            print(file_open,"need to open the file next=========")
+            with open(file_open,'r') as f_res:
+                f_save.write('\n'+'***********'+'\n')
+                f_save.write(file_open+'\n\n\n')
+                f_save.write('\n'+'***********'+'\n')
+                row=1  #记录所查找的行号
+                result=[]   #存储最后的输出结果
+
+                for line in f_res:
+                    for j in KeyWords:
+                        if j in line:
+                            ss="========"+str(row)+"========"+line+'\n'
+                            key[j]=key[j]+1
+                            f_save.write(ss)
+                            f_save.flush()
+                            result.append(ss)
+                    row=row+1
+
+        print key,'23456789'
+        f_save.write('\n'+str(key)+'\n')
+
+
+
+# 第一步   查找目录  列举需要解压的文件（解压文件  1.tar.gz  2.gz  3.zip）
+PATH=os.getcwd()
+ALL_list=Filelist(path=PATH)
+print(ALL_list)
+
+# 第二步   解压文件  （1.tar.gz 和 zip 直接解压到当前目录  2.gz文件则直接解压到指定新建目录下 ）
+TARGZ=[]  #存储 .tar.gz 文件
+GZ=[]     #存储 .gz     文件
+ZIP=[]    #存储 .zip    文件
+
+pattern_targz="applogcat-log(.*?)\.tar\.gz"
+pattern_gz="applogcat-log\.(.*?)\.gz"
+pattern_zip="applogcat-log\.(.*?)\.zip"
+
+for i in ALL_list:
+    if re.search(pattern_targz,i) is not None:
+        TARGZ.append(i)
+    elif re.search(pattern_gz,i) is not None:
+
+        GZ.append(i)
+    elif re.search(pattern_zip,i) is not None:
+        ZIP.append(i)
+print (TARGZ,'000000000000000',GZ,'1111111111111111',ZIP)
+
+
+print('YYYYYYYYYYYYYYYYYYYYY')
+print(TARGZ)
+print('YYYYYYYYYYYYYYYYYYYYY')
+extractTARGZFile(files=TARGZ)
+
+extractGZFile(files=GZ)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
