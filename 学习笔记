@@ -1,4 +1,50 @@
 
+Python常见的坑----默认编码是ascii,不是unicode,无法解析Unicode（Python3版本可以）
+                  解决的方法：通常在代码最前面加上两句  reload（sys）
+                                                     sys.setdefaultencoding('utf-8')
+
+登录的步骤
+下面的方法采用requets库，可以百度参考下官方文档使用方法，也可以参考使用urllib和urllib2这两个库
+import sys
+import requests
+from bs4 import beautifulSoup
+
+
+-------获取session避免后续重复登录-------
+s=requests.session()
+s.trust_env=False     #设置忽略代理，最好还是将代理加上，因为有些网站不允许机器爬虫，此时就要设置好代理
+
+def login():
+    name='your xx'
+    pwd='your xx'
+    params={
+            '里面的参数需要根据实际登录网页决定，可以输入错误的信息，
+             然后看网页源码提示需要填充哪些信息'
+            }
+     login_url='-------------------'#登录的网页，具体查看你登录的form,不要被浏览器输入框的URL迷惑了哦
+     
+     res=s.post(login_url,params=params)  #采用session的post方式登录
+     global cookie
+     cookie=res.cookies  #获取cookie，后面获取网页源码需要使用，不保留的话就会要重新登录
+     
+     if res.status_code==200:  #返回200表示服务器返回页面成功  具体参数可以查看服务器返回状态码
+          print（'successful connected'）
+          if cookie is None or cookie['login_failLoginCount'] is None or cookie['login_failLoginCount']!='0': 
+                print('fail login')
+          else:
+                print('succes login')
+第二步：查找相关信息  当然也可以使用xpath,或者使用正则
+def seek():
+    base_url='----------'
+    r=s.get(base_url,cookies=cookie)  #这里的s对象就是前面requests.session()实例化过来的，cookie也是前面登录获取的，用来避免重复登录
+    if r.status_code==200:
+        page_soup=BeautifulSoup(r.content.decode('utf-8','ignore'),'lxml')#用beautiful采用lxml解析网页
+        if page_soup:
+            info=page_soup.find('div',class='page mb20 aLr MT5')
+
+
+
+
 1. 获取网页响应头的常用操作方法：
 req=urllib2.Request('URL')
 page=urllib2.urlopen(req)
@@ -6,7 +52,12 @@ page.info().getheaders('Server')  //此处要根据网页的具体关键字来�
 
 2.获得cookie的方法
 a.手动获取，直接在浏览器中，按住F12然后刷新网页在Internet选项中去复制对应的cookie即可
-b.通过获取相应头的方式来获取-----（此方法待验证，还没尝试）
+b.通过获取相应头的方式来获取
+  s=requests.session()
+  res=s.post(login_url,params=params)  #采用session的post方式登录
+  cookie=res.cookies  #获取cookie，后面获取网页源码需要使用，不保留的话就会要重新登录
+   r=s.get(base_url,cookies=cookie)  #这里的s对象就是前面requests.session()实例化过来的，cookie也是前面登录获取的，用来避免重复登录
+      
 c.通过selenium登录网页，然后共享cookie给request库，（该方法得百度，还没尝试）
 
 
