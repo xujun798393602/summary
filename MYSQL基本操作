@@ -3,3 +3,4 @@
   
 2.在创建表时添加主键 CREATE TABLE xxx_table_name([字段描述...省略]) ,PRIMARY KEY(index_col_name);
  在创建xxx_table_name表时，将表中的index_col_name这列设置为主键
+ eg: CREATE TABLE XX_TABLE(S_id int(10),name_your varchar(25) NOT NULL,PRIMARY KEY(S_id))
