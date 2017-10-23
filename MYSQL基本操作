@@ -1,0 +1,2 @@
+1.添加主键 ALTER TABLE xxx_table_name ADD CONSTRAINT PRIMARY KEY(字段名)；
+  eg:ALTER TABLE xujun1 ADD CONSTRAINT PRIMARY KEY(book1)；  将xujun1这张表的book1列设置为主键
