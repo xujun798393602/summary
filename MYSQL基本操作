@@ -7,3 +7,5 @@
  
 3.删除主键的操作
   ALTER TABLE XXX_table_name DROP PRIMARY KEY;
+  
+4.连表操作
