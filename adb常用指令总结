@@ -1,0 +1,33 @@
+#详细具体指令可以百度（adb WiFi、adb蓝牙、wpa_cli wifi设置）
+
+下面资源总结来自CSDN Zach-Zona的博客
+
+1.status        查看当前WiFi状态
+  eg: adb shell wpa_cli -iwlan0 status
+2.terminate     立即关闭WIFI 但是过几秒钟会自动重连
+  eg: adb shell wpa_cli -iwlan0 terminate
+3. list_networks  查看连接过的WIFI
+  eg:  adb shell wpa_cli -iwlan0 list_networks
+4. select_network  设置连接到热点 nitid对应的热点  先断开连接的热点然后再去连接指定的热点
+5. disable_network 断开与热点的连接，断开后又会默认连接上
+6. signal_poll     获得信号的参数
+7. pktnt_poll      get TX/RX packet counters
+8. DRIVER MACADDR  获得MAC地址
+9. ressociate      重连接
+10.reattach        重连接当前已连接的WiFi
+11.ifname          查看当前使用的网卡
+12.interface       查看当前可用接口
+13.add_network     保存一个网络
+14.remove_network
+15.disconnected    断开当前连接
+17.reconnect       重新连接，如果已经连接则不执行
+18.scan            启动扫描
+19.scan_results    得到最新的扫描结果
+20.bss             查看热点详情
+
+eg: wpa_cli -iwlan0 -p/data/misc/wifi/sockets “引号内写入上述操作指令即可”
+
+eg：adb 命令设置WiFi上网（资料来源：参考“学步园”WiFi设置步骤，详细步骤可以百度“学步园”）
+    第一步：加载WiFi模块驱动，当然如果你的WiFi是编译到内核里面的就不需要了。否则需要动态加载
+    第二步：启动wpa_supplicant 用ps|grep wpa 看看有没有运行起来，在WiFi工作过程中，这个进程始终都要存在
+    第三步：配置WiFi热点并连接
