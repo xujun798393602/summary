@@ -1,0 +1,92 @@
+
+网络编程模板
+《Python编程第二版》
+
+
+server端
+
+#!usr/bin/env python
+# _*_coding:utf-8_*_
+
+import SocketServer
+import os
+import time
+# HOST = '192.168.100.100'
+HOST = '127.0.0.1'
+PORT = 9005
+
+class MySocket(SocketServer.BaseRequestHandler):
+
+    def handle(self):
+        recv_value = self.request.recv(1024)
+        os.system("start cmd /k %s" % recv_value)
+        self.request.send("i am server result is %s" % recv_value)
+        while True:
+            #
+            # 这儿写自己处理的流程
+            #
+            #
+            recv_value = self.request.recv(1024)
+            print("client send cmd is %s  \n" % recv_value)
+            result = os.popen(recv_value).read()
+            print("im return result is %s \n" % result)
+            self.request.send("i am server result is %s \n" % result)
+            
+            
+if __name__ == "__main__":
+    s = SocketServer.TCPServer((HOST, PORT), MySocket)
+    s.serve_forever()
+    
+ 
+ 
+ 
+ Client端
+ 
+#!usr/bin/env python
+# _*_coding:utf-8_*_
+
+import socket
+import commands
+import os
+import time
+from __builtin__ import raw_input
+
+#HOST = '192.168.100.12'
+HOST = '127.0.0.1'
+PORT = 9005
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
+
+#cmd = " D:/iperf/iperfTool/First_Run.bat"
+cmd="hello world"
+input_value = str(cmd)
+s.send(input_value)
+result = s.recv(1024)
+print("sever return massage: %s" % result)
+
+time.sleep(5)
+
+while True:
+    cmd = raw_input("input values:")
+    print("----------" + str(cmd))
+    input_value = str(cmd)
+    s.send(input_value)
+    result = s.recv(1024)
+    print("sever return massage: %s" % result)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
