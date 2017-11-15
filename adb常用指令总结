@@ -31,3 +31,6 @@ eg：adb 命令设置WiFi上网（资料来源：参考“学步园”WiFi设置
     第一步：加载WiFi模块驱动，当然如果你的WiFi是编译到内核里面的就不需要了。否则需要动态加载
     第二步：启动wpa_supplicant 用ps|grep wpa 看看有没有运行起来，在WiFi工作过程中，这个进程始终都要存在
     第三步：配置WiFi热点并连接
+    
+ adb pull /data/log/android_logs       #Android
+ adb pull /vendor/firmware/Total.wdk   #固件--具体需要根据手机系统版本确定存放位置
