@@ -1,0 +1,80 @@
+
+#------------- 弹框显示hello
+
+
+<html>
+<head> 
+<title>你好</title>
+<script language="JavaScript" type="text/javascript">
+<!--
+var q=0
+function oncge(){
+q+=1
+alert(document.getElementById("password").value)
+document.getElementById("password").value=q
+}
+
+function ch(){
+alert('world hello')
+
+}
+
+//-->
+</script>
+
+<style type="text/css">
+body{
+margin:0 auto;
+}
+div{
+width:1000px;
+height:500px;
+margin:0 auto;
+}
+form{
+width:500px;
+height:300px;
+border:5px solid green;
+margin:0 auto;
+background:blue;
+padding:0 0 200 0;
+}
+</style>
+
+</head>
+
+<body>
+<p>hello world</p>
+<div  style="border:1px solid red"> 
+
+<form name="loginForm" class="login-form" method="post">
+	<script language="JavaScript" for="window" event="onload"> 
+    alert('网页读取完成，请慢慢欣赏！'); 
+    </script>
+	<input name="Name" value="xujun"></br>
+	<input id="password" type="text" name="Password" value="ooooo" />	
+	<input type="button" value="test" onclick="oncge()" />
+
+	<input type="checkbox" onclick="ch()"/>
+	<input type="radio" name="hehe" >11</input>
+	<input type="radio" name="hehe" >21</input>
+	
+	<select  id="ss" onmouseout="chan()">
+	<option>1111112</option>
+	<option>2</option>
+	<option>3</option>
+	<option selected="selected">-----</option>
+	</select>s
+	<script language="JavaScript" type="text/javascript">
+	function chan(){
+	var q=document.getElementById("ss").value;
+    alert(q); 
+	}
+    </script>
+	
+</form>
+</div>
+
+
+</body>
+</html>
