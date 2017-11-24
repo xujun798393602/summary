@@ -25,6 +25,35 @@
 10.纯文本文件，student.txt  {"1":["张三，150100,102"]，“2”：[“李四”，120,130,100]}
    将上述内容写到student.xls文件中
 
+习题2：
+# _*_ coding:utf-8 _*_
+
+import string,random
+
+#激活码中的字符和数字
+Activation_code=string.ascii_letters+string.digits
+
+#获得四个字母和随机数的随机组合
+def getRandom(string_active):
+    return "".join(random.sample(string_active,4))
+
+#group：每个验证码由几个随机码组成  下面格式表示又4个随机码组成验证码
+#生成每个激活码有几组 eg: xxxxxx-xxxxxx-xxxxxx-xxxxxx
+def concatenate(group,string_active):
+    return "-".join([getRandom(string_active) for i in range(group)])
+
+# 参数n --产生多少个验证码  group：每个验证码由几个随机码组成
+def generate(n,group,string_active):
+    return [concatenate(group,string_active) for i in range(n)]
+
+print(generate(20,4,Activation_code))
+
+if __name__=='__main__':
+    print(generate(200,4,Activation_code))
+
+
+
+
 习题4：
      步骤1：去掉标点符号  采用方式可以去停词或者直接用replace去掉，但是后者花费的时间应该会长一些
          2.切割分词，采用精确模式切分，因为全模式导致的重复词汇太多
