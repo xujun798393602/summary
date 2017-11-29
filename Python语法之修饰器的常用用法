@@ -1,0 +1,60 @@
+#常用方法一
+#修饰器修饰不带参数的函数
+def Good(fun1):
+    def wrapper():
+        print('hello')
+        fun1()
+    return wrapper
+
+@Good
+def bad_boy():
+    print('i am bad boy')
+
+bad_boy()
+
+#常用方法二
+#修饰器修饰带参数的函数---wrap必须带的参数个数和修饰的函数个数一致
+#因为参数是先传递给wrap 然后再传递给被修饰函数
+def beauty(fun1):
+    def wrap(a,b):
+        print('hello  %s'%fun1.__name__)
+        fun1(a,b)
+        print('finish %s'%fun1.__name__)
+    return wrap
+
+@beauty
+def fo1(x,y):
+    print('i am foo')
+    print(x+y)
+
+fo1(1,2)
+
+#常用方法三
+#修饰器带参数去修饰不带参数的函数
+def switch(x):
+	if x:
+	    print('switch 1')
+	    return switch_1
+	else :
+	    print('switch 0')
+	    return switch_0
+def switch_1(func):
+    def wrap():
+	    print('-----1----')
+	    func()
+    return wrap
+
+def switch_0(func):
+    def wrap():
+	    print('-----0----')
+	    func()
+    return wrap
+
+@switch(0)
+def hello():
+    print('hello ni hao ')
+    
+
+hello()
+
+
