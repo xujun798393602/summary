@@ -82,4 +82,60 @@ with open('Test.txt','r') as f: #读取文本
     # print (result)
     
     
+ 习题9：
+ #_*_ coding:utf-8 _*_
+
+import jieba
+import string
+
+#eg:'你好，北京长城故宫。我喜欢吃大西瓜。哈哈哈' 
+#    效果-----输入上述内容，把'哈哈哈'当成敏感词用'****'输出来显示
+
+
+#读取当前敏感词文件中敏感词列表
+def ReadSensitiveFile(File1='./sensitiveFile.txt'):
+    f_list=[]
+    with open(File1,'r+') as Fp:
+        for words in Fp:
+            f_list.append(words.rstrip('\n'))
+    return f_list
+ 
+#分词操作
+def TokenWord(inputString=''):
+    return "/".join(jieba.cut(inputString,cut_all=False))
+    
+if __name__ == '__main__':
+    ser_input=raw_input('please say something:')
+    print (ser_input)
+    result=TokenWord(ser_input)
+    
+    #result.replace(",|.|？","/")  #用'/'替换掉标点符号  py2没实现该步骤
+    input_list=result.split('/')
+    for i in input_list:
+        print(i)
+        if i in string.punctuation:
+            print(i)
+            input_list.pop(input_list.index(i))
+    for i in input_list: 
+        print(i)
+    print(input_list)
+
+    #result = jieba.tokenize(ser_input.decode('utf-8'))  #其结果是生成器 py3环境下比较使用
+    #for i in result:
+    #    print(i)
+ 
+    #xx=ReadSensitiveFile()
+    #print(xx)
+    print('hello')
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
