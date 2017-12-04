@@ -1,0 +1,43 @@
+要求：
+1.用Python发送一份邮件给好友  邮件内容需要包含文字正文，图片附件，或者超链接
+2.用Python接收邮件文件，接收的文件可以查看图片，文字正文，通过解析文字正文，并用窗口打印出来
+
+代码参考：CSDN博客-- Xiarendeniao
+参考书籍：Python核心编程第二版  网络编程邮件发送部分
+
+发送邮件：(待测试)
+#_*_ coding:utf-8 _*_ 
+
+import smtplib
+#from email import encoders
+#from email.header import Header
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+
+
+if __name__ == "__main__":
+    fromaddr='798393602@qq.com'   #发邮件人的地址
+
+    toaddrs=['743567550@qq.com'] #接收邮件人的地址
+
+    subject='smtplib test'
+    content='hello can you see it from xujun email'
+
+    textApart=MIMEText(content)
+    imageFile='F:/xx.jpg'
+    imageApart=MIMEImage(file(imageFile,'rb').read(),imageFile.split('.')[-1])
+    imageApart.add_header('Content-Disposition','attachment',filename=imageFile.split('.')[-1])
+    m=MIMEMultipart()
+    m.attach(textApart)
+    m.attach(imageApart)
+    m.attach(imageApart)
+    m['Subject']=subject
+
+    server=smtplib.SMTP('SMTP.qq.com')  #邮件的域名
+    server.login(fromaddr,'Huawei@12345')   #用户名
+    server.sendmail(fromaddr,toaddrs,m.as_string())
+    server.quit()
+
+
+接收邮件：（待添加）
