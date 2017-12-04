@@ -15,27 +15,29 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 
+
 if __name__ == "__main__":
-  fromaddr='798393602@qq.com'   #发邮件人的地址
-	toaddrs=['xx@qq.com','xx@qq.com'] #接收邮件人的地址
-	
-	subject='smtplib test'
-	content='hello can you see it from xujun email'
-	
-	textApart=MIMEText(content)
-	#imageFile='/tmp/code2.png'
-	#imageApart=MIMEImage(file(imageFile,'rb').read(),imageFile.split('.')[-1])
-	#imageApart.add_header('Content-Disposition','attachment',filename=imageFile.split('.')[-1])
-	
-	m=MIMEMultipart()
-	m.attach(textApart)
-	m.attach(imageApart)
-	m['Subject']=subject
-	
-	server=smtplib.SMTP('SMTP.qq.com')  #邮件的域名
-	server.login(fromaddr,'password')   #用户名
-	server.sendmail(fromaddr,toaddrs,m.as_string())
-	server.quit()
+    fromaddr='798393602@qq.com'   #发邮件人的地址
+
+    toaddrs=['743567550@qq.com'] #接收邮件人的地址
+
+    subject='smtplib test'
+    content='hello can you see it from xujun email'
+
+    textApart=MIMEText(content)
+    imageFile='F:/xx.jpg'
+    imageApart=MIMEImage(file(imageFile,'rb').read(),imageFile.split('.')[-1])
+    imageApart.add_header('Content-Disposition','attachment',filename=imageFile.split('.')[-1])
+    m=MIMEMultipart()
+    m.attach(textApart)
+    m.attach(imageApart)
+    m.attach(imageApart)
+    m['Subject']=subject
+
+    server=smtplib.SMTP('SMTP.qq.com')  #邮件的域名
+    server.login(fromaddr,'Huawei@12345')   #用户名
+    server.sendmail(fromaddr,toaddrs,m.as_string())
+    server.quit()
 
 
 接收邮件：（待添加）
