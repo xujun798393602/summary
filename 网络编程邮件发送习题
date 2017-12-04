@@ -35,7 +35,7 @@ if __name__ == "__main__":
     m['Subject']=subject
 
     server=smtplib.SMTP('SMTP.qq.com')  #邮件的域名
-    server.login(fromaddr,'Huawei@12345')   #用户名
+    server.login(fromaddr,'ssssd12345')   #用户名
     server.sendmail(fromaddr,toaddrs,m.as_string())
     server.quit()
 
