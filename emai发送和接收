@@ -5,27 +5,34 @@
 代码参考：CSDN博客-- Xiarendeniao
 参考书籍：Python核心编程第二版  网络编程邮件发送部分
 
-发送邮件：(待测试)
+发送邮件：(测试通过) ----------------可以用qq邮箱发邮件啦（修改对应账号密码即可）
+
+要点：注意先开通QQ邮箱的port3端口和SMTP服务，不然就发送不成功
+      开通方法参照QQ邮箱使用帮助
+
 #_*_ coding:utf-8 _*_ 
 
 import smtplib
 #from email import encoders
-#from email.header import Header
+from email.header import Header
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 
 
 if __name__ == "__main__":
-    fromaddr='798393602@qq.com'   #发邮件人的地址
 
-    toaddrs=['743567550@qq.com'] #接收邮件人的地址
+    user_name='743567'
+    user_password='hahha'
+    Send_addr='743567@qq.com'      #发邮件人的地址
+    Receive_addrs=['79836@qq.com'] #接收邮件人的地址
+    email_porxy='SMTP.qq.com'      #域名  eg:'SMTP.163.com'
 
-    subject='smtplib test'
-    content='hello can you see it from xujun email'
+    subject='smtplib test'         #邮件主题
+    content='hello can you see it from xujun email' #邮件正文
 
     textApart=MIMEText(content)
-    imageFile='F:/xx.jpg'
+    imageFile='D:/xx.jpg'
     imageApart=MIMEImage(file(imageFile,'rb').read(),imageFile.split('.')[-1])
     imageApart.add_header('Content-Disposition','attachment',filename=imageFile.split('.')[-1])
     m=MIMEMultipart()
@@ -34,9 +41,10 @@ if __name__ == "__main__":
     m.attach(imageApart)
     m['Subject']=subject
 
-    server=smtplib.SMTP('SMTP.qq.com')  #邮件的域名
-    server.login(fromaddr,'Huawei@12345')   #用户名
-    server.sendmail(fromaddr,toaddrs,m.as_string())
+    server=smtplib.SMTP()  
+    server.connect(email_porxy)#邮件的域名
+    server.login(user_name,user_password)   #用户名  #user_name和邮箱的名字不一样（对于画威），如果是QQ邮箱则用户名和邮箱@前面的一致
+    server.sendmail(Send_addr,Receive_addrs,m.as_string())
     server.quit()
 
 
