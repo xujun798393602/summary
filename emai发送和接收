@@ -48,4 +48,111 @@ if __name__ == "__main__":
     server.quit()
 
 
-接收邮件：（待添加）
+接收邮件：（qq邮箱测试通过）
+
+#_*_ coding:utf-8 _*_ 
+
+import poplib
+import email
+import email.header
+import email.utils
+import cPickle
+from email import parser
+import string
+
+#相关知识点介绍----详细介绍需要百度email传输协议
+
+#stat() 返回长度为2的元组：分别表示邮箱中邮件的数量 邮件消息的总大小（字节数）
+#list() 返回长度为3的元组：分别表示服务器的返回信息、消息列表、返回信息的大小
+#retr(messagenumber)返回长度为3的元组  服务器的返回信息、指定标号邮件的所有行、邮件消息的大小（字节数）
+#quit（） 结束连接并退出
+
+#重点：通过retr()方法得到的邮件的所有行消息是没有进行解码的。需要采用email库来将消息转化为email实例，从而通过
+#email的方法对邮件进行处理
+#email.message_from_string()这个方法可以将string的邮件内容转换成email.message实例，然后通过其他方法
+#将邮件内容（发件人、发件时间、主题正文等）提取出来
+#邮件头：邮件头携带有发件人（from）、发给谁（to）、邮件主题（subject）、接收日期（data）等信息
+#附件（attach）
+#邮件主体（body） body有文本格式和html格式之分，两种格式可以同时存在
+#邮件的每个段文本称为Payload--格式是（Content-Transfer-Encoding）,解码可以以这个格式来解码
+#当Content-type的value=‘text/plain’ 表示文本格式的body
+#                     =‘text/html’  表示HTML格式的body
+#如果这两种都不对，就默认它为html格式的body
+
+#信息提取出来后，可以通过cPickle.dump()方法将信息存入磁盘文件中
+
+def DownMessage(mail_parse):
+   
+    types=mail_parse.get_content_type()
+    charset=mail_parse.get_content_charset()
+    mailobject=''
+    if types =='text/plain' or types=='text/html':
+        try:
+            if charset =='utf-8':
+                mailobject=unicode(mail_parse.get_payload(decode=True),charset)
+            elif charset==None:
+                mailobject=unicode(mail_parse.get_payload(decode=True))
+            else:
+                mailobject=unicode(mail_parse.get_payload(decode=charset),charset)   
+        except:
+            print('BLANK')
+    elif types=='text/base6':
+        try:
+            mailobject=unicode(base64.decodestring(mail_parse.get_payload(),charset))
+        except:
+            print('BLANK')    
+    return mailobject
+
+#if __name__ == "__main__":
+ 
+
+host='pop.qq.com'
+
+user_name='许大大爱吃西瓜'
+user_password='hello'
+
+pop_conn=poplib.POP3_SSL(host) #连接到邮件所在域名服务器
+pop_conn.user(user_name)
+pop_conn.pass_(user_password)
+
+ret=pop_conn.list()#获取邮件列表
+mailcount=len(ret[1])
+
+for num in range(mailcount-3,mailcount):
+   rap,msglines,msgsize=pop_conn.retr(num)
+   mail=email.message_from_string(string.join(msglines,'\n'))#转化为email.message实例
+   subject=email.Header.decode_header(mail['subject'])[0][0]#获取邮件主题和内容  返回一个以“字符编码”编码的“字串”
+   mail_from=email.utils.parseaddr(mail['From'])[1]#获取发件人邮箱
+   mail_time=email.Header.decode_header(mail['Data'])[0][0]#获取发件时间
+   mail_content=DownMessage(mail)#获取邮件正文
+   #mail_content=mail
+   print(mail_content)
+   with open('xx_test.txt','a') as f:
+       f.write('发件人   '+mail_from.encode('utf-8'))
+       f.write('发件时间   '+mail_time.encode('utf-8'))
+       f.write('发件内容   '+mail_content.encode('utf-8'))
+       
+   #存入磁盘操作
+   #fp=file('mail.txt','w+')
+   #cPickle.dump(mail_from,fp)#将获取的信息存入磁盘--当前脚本下产生一个存储文件
+   #cPickle.dump(mail_time,fp)
+   #cPickle.dump(mail_content,fp)
+   #fp.close()
+   
+pop_conn.quit()
+    
+
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
