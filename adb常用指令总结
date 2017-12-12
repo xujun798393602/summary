@@ -29,6 +29,18 @@
 adb shell wl channel
 22.查看WiFi版本
 adb shell wl ver
+23.查看信号强度
+adb shell wl rssi
+24.查看MAC地址  #  不确定能不能使用，百度上没一个特定的说法---安卓底层是Linux,也可以用Linux的操作方法
+参考方法一：adb shell wpa_cli -iwlan0 -p/data/misc/wifi/sockets DRIVER MACADDR   （待验证）
+参考方法二：adb shell
+           cd /sys/class/net/eth0 或者 cd /sys/class/net/wlan0
+           cat address
+           ==>  adb shell cat /sys/class/net/eth0
+           或者 adb shell cat /sys/class/net/wlan0
+25.查看CPU型号
+adb shell cat /proc/cpuinfo
+
 
 eg: wpa_cli -iwlan0 -p/data/misc/wifi/sockets “引号内写入上述操作指令即可”
 
