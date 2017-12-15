@@ -1,0 +1,153 @@
+
+----------------------------------------------------------------------
+以下是文本操作的常用方法，如有不懂，可以复制相关接口，百度下就有分析介绍了
+----------------------------------------------------------------------
+
+==============================文本操作=================================
+方法1： 
+import os,sys
+myfile=ur"d:\hello\nihao.py"
+#判断文件是否存在
+if os.path.exists(myfile):
+    for line in open(myfile).readlines():
+        print(line.decode("utf-8"))#因为文件以utf-8格式保存
+#这种方式有个缺点，就是如果文件行数过大，readlines()这个方法就不行，用逐行readline()读取速度更开
+
+方法2：(这种方法用的比较多 好处：如果文件出现异常会自动保存)
+with open('hello.txt','r') as f:
+    print(f.read())
+==============================文件遍历的方法=================================
+方法1：
+#encoding=utf-8
+import glob
+import os,sys
+filepath=r"c:Program Files\*"
+files=glob.glob(filepath)
+for file in files:
+    print file
+print (os.path.dirname(os.path.dirname(filepath)))
+方法2：   
+#for file in os.walk(r"c:Program Files"):
+#    print(file)
+#os.walk 会列出当前目录下的子目录中的所有目录和文件，并递归遍历子目录
+方法3：
+#for file in os.listdir(r"c:Program Files"):
+#    print(file)
+#os.listdir只会列出当前目录下的文件和文件夹，结果为list
+
+==============================读取excel方法=================================
+方法1: 用xlrd库操作方法（百度上还有其余的方法，有时间再添加,或者使用pandas,比较流行）
+import xlrd,sys,xdrlib
+filename=ur"d:\hello.xls"
+def open_excel(file='file.xls'):
+    try:
+        data=xlrd.open_workbook(file)
+        return data
+    except Exception,e:
+        print( str(e) )
+  
+#根据索引获取Excel表格中的数据  colmn列
+def excel_table_byindex(file='file.xls',colnameindex=0,by_index=0):
+    data=open_excel(file)
+    table=data.sheets()[by_index]
+    nrows=table.nrows #行数
+    colnames=table.row_values(colnameindex)#某一行数据（第一行，表头）
+    list=[]
+    #遍历表的每一行数据
+    for rownum in range(1,nrows):
+        row=table.row_values(rownum)#行数据
+        if row:
+            app={}
+            for i in range(len(colnames)): #len(colnames)列数
+                app[colnames[i]]=row[i]
+            list.append(app)
+     return list
+
+def main():
+    tables=excel_table_byindex(filename)
+    for row in tables:
+        for key,value in row.items():
+            print(key," = ",value)
+    
+if __name__=="__main__":
+    main()
+
+方法2： 
+#encoding=utf-8
+import os
+from win32com.client import constants,Dispatch
+import random
+
+filename=ur"d:\hello.xls"
+app=Dispatch(Excel.Application)#打开excel
+if not os.path.exists(filename): #检测文件是否存在
+    print(u"文件不存在")
+    exit()   #文件不存在
+workbook=app.Workbooks.Open(filename)#打开这个文件
+worksheet=workbook.Worksheets(1)   #获取第一个表格
+print( worksheet.Cell(3,3).Value ) #打印第三行第三列的内容
+worksheet.Cell(3,3).Value=random.randint(1,100) #更改第三行第三列的内容
+workbook.Close(SaveChanges=1)   #关闭且保存
+app.quit  #退出
+
+
+==============================读取XML方法=================================
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
+    import xml.etree.ElementTree as ET
+import sys
+import re
+
+filename=ur"d:\hello.xml"
+try:
+    tree=ET.parse(filename) #传入文件并解析
+    root=tree.getroot()     #获取根节点
+except Exception,e :
+    print( "Error : cannot parse file" ,e )
+    sys.exit(1)
+print root.tag    #节点类型
+print root.attrib #节点属性
+#读取某一个属性
+print( "*"*50)
+print("project_path=",root.attrib.get("Project_Path",""))
+print( "*"*50)
+#读取所有子节点
+for child in root:
+    print( child.tag,"=",child.text )
+#自有选择某一个子节点
+print( "*"*50)
+node=root.find("usernamecn")
+print("usernamecn=",node.text)
+print( "*"*50)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
