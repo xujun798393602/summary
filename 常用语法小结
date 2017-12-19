@@ -1,3 +1,8 @@
+
+python创建一个文件
+os.systerm("fsutil createnew ./test.txt 10")  #在当前目录下创建一个test.txt大小为10kB的文件
+
+
 1.利用内建isinstance和basestring来判断是否字符串-------判断类型
   def adj_isString(anobj):          #优先使用
        return isinstance(anobj,basestring)
