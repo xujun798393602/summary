@@ -24,8 +24,10 @@
 18.scan            启动扫描
 19.scan_results    得到最新的扫描结果
 20.bss             查看热点详情
-
 21.查看信道
+eg: wpa_cli -iwlan0 -p/data/misc/wifi/sockets “引号内写入上述操作指令即可”
+eg: adb shell wpa_cli -iwlan0 -p/data/misc/wifi/sockets status
+
 adb shell wl channel
 22.查看WiFi版本
 adb shell wl ver
@@ -40,9 +42,6 @@ adb shell wl rssi
            或者 adb shell cat /sys/class/net/wlan0
 25.查看CPU型号
 adb shell cat /proc/cpuinfo
-
-
-eg: wpa_cli -iwlan0 -p/data/misc/wifi/sockets “引号内写入上述操作指令即可”
 
 eg：adb 命令设置WiFi上网（资料来源：参考“学步园”WiFi设置步骤，详细步骤可以百度“学步园”）
     第一步：加载WiFi模块驱动，当然如果你的WiFi是编译到内核里面的就不需要了。否则需要动态加载
