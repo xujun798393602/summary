@@ -3,8 +3,24 @@ python创建一个文件
 os.systerm("fsutil createnew ./test.txt 10")  #在当前目录下创建一个test.txt大小为10kB的文件
 
 
+
 1.利用内建isinstance和basestring来判断是否字符串-------判断类型
   def adj_isString(anobj):          #优先使用
        return isinstance(anobj,basestring)
   def adj_isString(anobj):   #这种就比较low  当然也可以使用
        return type(anobj) is type('')
+
+2.python如何调用bat脚本的语法------------详细操作方法最好还是搜下百度文库中的以下数据库使用方法-------
+对于cmd窗口的控制，可以参照Python的subprocess库的方法，或者直接用os.system()的这个模块
+如果要知道一些常见的杀掉进程的方法：在cmd命令窗口输入“taskkill /? ”    windows会显示命令
+
+方法一：
+os.system('cmd /k start d:\\aa\hello.bat')---调用D盘aa文件夹下名字为hello的bat 参数/k表示会打开cmd窗口，也可以去掉该参数
+缺点：不知道其进程ID，后续怎么好杀掉其进程
+
+方法二：pid=subprocess.Popen('cmd /k start d:\\aa\hello.bat')
+       subprocess.Popen('cmd /taskkill /PID %s'%pid)    #杀掉进程号为pid的进程
+或者使用subprocess.call("taskkill /F /T /PID %s"%pid)    #这种方式也能杀掉Windows进程
+
+3.Python调用cmd窗口连续输入命令
+  subprocess.Popen('cmd /c cmd1xxxx & cmd2xxxx')-------简单几条命令还好，如果多了，最好写成一个bat，采用Python调用bat的方法
