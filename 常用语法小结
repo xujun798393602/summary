@@ -19,8 +19,54 @@ os.system('cmd /k start d:\\aa\hello.bat')---调用D盘aa文件夹下名字为he
 缺点：不知道其进程ID，后续怎么好杀掉其进程
 
 方法二：pid=subprocess.Popen('cmd /k start d:\\aa\hello.bat')
-       subprocess.Popen('cmd /taskkill /PID %s'%pid)    #杀掉进程号为pid的进程
-或者使用subprocess.call("taskkill /F /T /PID %s"%pid)    #这种方式也能杀掉Windows进程
+       subprocess.Popen('cmd /taskkill /PID %s'%pid.pid)    #杀掉进程号为pid的进程
+或者使用subprocess.call("taskkill /F /T /PID %s"%pid.pid)    #这种方式也能杀掉Windows进程
 
-3.Python调用cmd窗口连续输入命令
+3.Python调用cmd窗口连续输入命令:
+  
   subprocess.Popen('cmd /c cmd1xxxx & cmd2xxxx')-------简单几条命令还好，如果多了，最好写成一个bat，采用Python调用bat的方法
+    
+方法一：（缺点：如果数据流比较多，pipe容易发生阻塞）
+        cmds = ['指令1',
+                '指令2',
+                '指令3',
+                'exit'
+              ]  
+        pipe = subprocess.Popen("adb shell", stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        code = pipe.communicate("\n".join(cmds) + "\n")
+        print(code)
+        
+方法二 ：
+        os.popen('指令1；指令2')  
+        #os.popen('adb shell "cd data/log;ls" ')  进入shell后的连续两条指令
+        #os.popen('adb remount ; adb devices ')   直接可以在不进入shell环境下的两条指令 
+        # adb shell "指令1;指令2;指令3;指令4" ---->cmd窗口下 运行adb shell 后再执行的指令（最好运行系统自带指令，否则容易阻塞）
+        
+ 方法三：第一条指令用adb指令   第二条可能就是cmd指令，暂时没有指定
+        #  os.popen('指令1 | 指令2')                 直接可以在不进入shell环境下的两条指令 
+        #os.popen('adb shell “指令1 |  指令2 ” ')    进入shell后的连续两条指令
+        
+ 方法四：
+        # import commands
+        # commands
+        
+ 方法五：模拟在shell环境后连续输入指令
+        # adb shell "指令1；指令2；指令3"   -----window窗口
+        # cmds='adb shell "指令1；指令2；指令3" '        cmds='adb shell "cd data/log/;ls"' 可行
+        # subprocess.Popen(cmds,shell=True)   ---->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
