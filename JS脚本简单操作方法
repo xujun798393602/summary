@@ -1,0 +1,89 @@
+
+目的：熟悉 js的简单操作
+
+1.需要先百度从网上下载webdriver网页自动化环境
+2.将对应版本的Python和浏览器（火狐或者谷歌）对应好，火狐自带录制工具，可以省去部分写脚本的步骤
+js_="var q=document.getElementById('dataBean.parentAttType').value='0' "
+driver.execute_script(js_)
+
+
+# _*_ coding: utf-8 _*_
+
+from selenium import webdriver
+import time
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
+
+
+#调用打开火狐浏览器
+driver=webdriver.Firefox()
+driver.get('https://www.xxxx.xxxxxxxx')#打开百度贴吧的登录页面
+
+#通过id定位
+driver.find_element_by_id("uid").clear()
+driver.find_element_by_id("uid").send_keys(user_ID)
+
+driver.find_element_by_id("name").clear()
+driver.find_element_by_id("name").send_keys(user_pas)
+driver.find_element_by_class_name("btn").click()
+time.sleep(3)
+#打印当前窗口主题
+print driver.title
+#打印当前窗口url
+print(driver.current_url)
+#切换窗口
+driver.switch_to_frame('leftFrame')
+
+driver.find_element_by_id("1").click()
+time.sleep(1)
+driver.find_element_by_id("sub1").click()
+time.sleep(1)
+# above=driver.find_element_by_id("sub1_2")#定位的字体外面的画框
+# ActionChains(driver).double_click(above)  #模拟鼠标操作 悬浮鼠标
+#点击链接文字
+driver.find_element_by_link_text(r'你好链接...').click()
+#切换到原有窗口、最初的窗口
+driver.switch_to.default_content()
+driver.switch_to_frame('mainFrame')
+# driver.find_element_by_id("totalType").click()
+#通过xpath点击
+driver.find_element_by_xpath('//*[@id="queryDataForPersonal"]/table[1]/tbody/tr/td/input[3]').click()
+#有选择下拉栏（有些可以使用Select方法）  方法二：用js操作下拉框
+# m=driver.find_element_by_id('dataBean.parentAttType')
+# m.find_element_by_xpath("//option[@value='1']").click()
+
+js_="var q=document.getElementById('dataBean.parentAttType').value='0' "
+driver.execute_script(js_)
+
+#---------------------------------切换窗口的操作------------------------------
+#----有弹窗（非警告窗这种）
+people_select=driver.current_window_handle  #获取当前打开窗口句柄
+driver.find_element_by_id("auto_SelectApprover").click()
+all_handles=driver.window_handles#获取所有打开窗口句柄
+
+for hand in all_handles:
+    if hand !=people_select:
+        print('check if entered the hand')
+        driver.switch_to_window(hand)
+        time.sleep(2)
+        print("now you need to select handler people")
+        driver.find_element_by_xpath('//*[@id="userName"]').clear()
+        driver.find_element_by_xpath('//*[@id="userName"]').send_keys(applyer)
+      
+driver.switch_to_window(people_select)
+driver.switch_to_frame('mainFrame')
+time.sleep(2)
+#---------------------------------切换窗口的操作------------------------------
+
+#开始时间和结束时间---有时间插件 使用js的操作方法
+js_="var q=document.getElementById('dataBean.startTime').value='2018-11-27 08:00' "
+driver.execute_script(js_)
+js_="var q=document.getElementById('dataBean.endTime').value='2018-11-27 17:30' "
+driver.execute_script(js_)
+
+
+
+
+
+
