@@ -1,0 +1,26 @@
+
+需要继续学习的捕捉方法：
+Wireshark 可以捕捉多种网络接口类型的包，哪怕是无线局域网接口。想了解支持的所有网络接口类型， 
+可以在我们的网站上找到http://wiki.wireshark.org/CaptureSetup/NetworkMedia.
+
+第一次设置Wireshark捕捉包可能会遇到一些小麻烦
+关于如何进行捕捉设置的较为全面的向导可以在:http://wiki.wireshark.org/CaptureSetup.
+
+Wireshark使用libpcap过滤语句进行捕捉过滤(what about winpcap?)
+你可以从http://wiki.wireshark.org/CaptureFilters找到捕捉过滤范例.
+
+过滤操作：
+经常有人用ip.addr ==1.2.3.4 表达式来选择所有包含ip地址为1.2.3.4的包，
+如果有人想用ip.addr !=1.2.3.4 表达式来排除ip地址为1.2.3.4的包，但结果却是错误的，正确的表达为!(ip.addr==1.2.3.4)
+它可以读作:"显示所有'字段名为ip.addr值存在1.2.3.4'为非真的包'",换句话说:"筛选所有字段名ip.addr的值中未出现1.2.3.4的包"
+
+
+
+
+
+
+
+
+
+
+
