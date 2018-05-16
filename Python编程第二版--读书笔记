@@ -143,6 +143,116 @@ if __name__=='__main__':
     mylog.warn("I'm warn")
     mylog.error("I'm error")
     mylog.critical("I'm critical") 
+
+
+
+
+
+
+#改进版本
+#!/usr/bin/env python
+# _*_ coding:utf-8 -*-
+__author__ = " Test"
+
+import logging
+import time
+import getpass
+import sys
+import os
+
+
+# 定义Log类
+class Mylog(object):
+	'''
+	#===================================================================================
+	#   @Method:        创建 Mylog() 类
+	#   @Func:          可以调用产生日志文件到指定文件夹下
+	#                   默认  mylog=Mylog() 'd://'+'xxx123'+'.log'   D盘下产生xx123.log日志文件
+	#                   设置  mylog=Mylog('d://AA/BB'+'XX'+'.log')    D盘AA/BB文件夹下产生 xx.log日志文件
+	#===================================================================================           
+	'''
+
+	def __init__(self,user = getpass.getuser()):
+		log_path = os.path.abspath(os.path.dirname(os.getcwd())) + '//logs//'
+		log_time = time.strftime('%Y_%m_%d_%H_%M', time.localtime(time.time()))
+		log_name = log_path + log_time + '.log'
+
+
+
+		self.logger = logging.getLogger(user)
+		self.logger.setLevel(logging.DEBUG)
+
+		formatter = logging.Formatter('%(asctime)-12s %(levelname)-8s %(name)-10s %(message)-12s')
+
+		#''' 创建一个文本Hand，将日志输出到文本'''
+		file_Hand = logging.FileHandler(log_name)  # 初始化新log文件
+		file_Hand.setFormatter(formatter)  # 设置日志格式
+		file_Hand.setLevel(logging.DEBUG)  # 设置优先级
+		# ''' 创建一个控制台Hand，将日志输出到控制台'''
+		Console_Hand = logging.StreamHandler()
+		Console_Hand.setFormatter(formatter)
+		Console_Hand.setLevel(logging.DEBUG)  # 设置优先级
+
+		self.logger.addHandler(file_Hand)
+		self.logger.addHandler(Console_Hand)
+
+	''' 日志的5个级别对应以下的五个函数 '''
+
+	def debug(self, msg):
+		return self.logger.debug(msg)
+
+	def info(self, msg):
+		return self.logger.info(msg)
+
+	def warn(self, msg):
+		return self.logger.warn(msg)
+
+	def error(self, msg):
+		return self.logger.error(msg)
+
+	def critical(self, msg):
+		return self.logger.critical(msg)
+
+
+# if __name__ == '__main__':
+# 	mylog = Mylog(logFile='d://AA//' + 'xxx234' + '.log')
+# 	mylog.debug("I'm debug")
+# 	mylog.info("I'm info")
+# 	mylog.warn("I'm warn")
+# 	mylog.error("I'm error")
+# 	mylog.critical("I'm critical")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
     
