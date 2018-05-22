@@ -1,0 +1,165 @@
+
+使用ConfigParser模块读写ini文件
+
+ConfigParserPython的ConfigParser Module中定义了3个类对INI文件进行操作。分别是RawConfigParser、ConfigParser、SafeConfigParser。
+模块所解析的ini配置文件是由多个section构成，每个section名用中括号‘[]’包含，每个section下可有多个配置项类似于key-value形式，例如：
+
+[Server]
+SvrInfo = test
+Version = 1.1
+[Client]
+Version = 1.0
+
+ConfigParser模块以ConfigParser类为例，其操作基本分为三类：1）初始化；2）读取配置；3）写入配置。
+
+1. ConfigParser 初始化
+
+使用ConfigParser 首选需要初始化实例，并读取配置文件：cf = ConfigParser.ConfigParser() cf.read("配置文件名")
+
+2. 基本的读取配置文件
+
+-read(filename) 直接读取ini文件内容
+-sections() 得到所有的section，并以列表的形式返回
+-options(section) 得到该section的所有option
+-items(section) 得到该section的所有键值对
+-get(section,option) 得到section中option的值，返回为string类型
+-getint(section,option) 得到section中option的值，返回为int类型，还有相应的getboolean()和getfloat() 函数。
+
+3.基本的写入配置文件
+
+-add_section(section) 添加一个新的section
+-set( section, option, value) 对section中的option进行设置，需要调用write将内容写入配置文件。
+-write(strout) 将对configparser类的修改写入
+
+eg:
+test.conf  
+  
+[sec_a]   
+a_key1 = 20   
+a_key2 = 10   
+    
+[sec_b]   
+b_key1 = 121   
+b_key2 = b_value2   
+b_key3 = $r   
+b_key4 = 127.0.0.1   
+  
+import ConfigParser   
+ 
+#初始化    
+cf = ConfigParser.ConfigParser()   
+cf.read("test.conf")  
+   
+# 读取配置文件  
+secs = cf.sections()   
+print ('sections:', secs )
+opts = cf.options("sec_a")   
+print ('options:', opts )
+kvs = cf.items("sec_a")   
+print ('sec_a:', kvs)   
+  
+#read by type  
+str_val = cf.get("sec_a", "a_key1")   
+int_val = cf.getint("sec_a", "a_key2")   
+print ("value for sec_a's a_key1:", str_val   )
+print ("value for sec_a's a_key2:", int_val   )
+    
+#写入配置文件  
+#update value  
+cf.set("sec_b", "b_key3", "new-$r")   
+#set a new value  
+cf.set("sec_b", "b_newkey", "new-value")   
+#create a new section  
+cf.add_section('a_new_section')   
+cf.set('a_new_section', 'new_key', 'new_value')   
+    
+#write back to configure file  
+cf.write(open("test.conf", "w"))   
+
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------    python CSV 基本操作    ----------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+
+#读取 CSV 文件
+import csv
+with open('some.csv', 'rb') as f:  # 采用b的方式处理可以省去很多问题（二进制方式）
+    reader = csv.reader(f)
+    # 读取一行，下面的reader中已经没有该行了
+    head_row = next(reader)
+    
+    #由于前面读取了一行，现在读取即从行号2开始读取数据
+    for row in reader:
+        # do something with row, such as row[0],row[1]
+        print(row)
+        
+# 写入CSV 文件
+import csv
+datas = [['name', 'age'],
+         ['Bob', 14],
+         ['Tom', 23],
+        ['Jerry', '18']]
+with open('some.csv', 'wb') as f:      # 采用b的方式处理可以省去很多问题
+    writer = csv.writer(f)
+    for someiterable in datas:
+        writer.writerows(someiterable)
+
+默认的情况下, 读和写使用逗号做分隔符(delimiter)，用双引号作为引用符(quotechar)，当遇到特殊情况是，可以根据需要手动指定字符, 例如:
+
+import csv
+with open('passwd', 'rb') as f:
+    reader = csv.reader(f, delimiter=':', quoting=csv.QUOTE_NONE)
+    for row in reader:
+        print (row)
+上述示例指定冒号作为分隔符，并且指定quote方式为不引用。这意味着读的时候都认为内容是不被默认引用符(")包围的
+
+
+字典方式地读写
+
+字典读操作
+import csv
+with open('names.csv') as csvfile:
+     reader = csv.DictReader(csvfile)
+     for row in reader:
+          print(row['first_name'], row['last_name'])
+
+#字典写操作
+import csv
+with open('names.csv', 'w') as csvfile:
+    fieldnames = ['first_name', 'last_name']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+    writer.writerow({'first_name': 'Baked', 'last_name': 'Beans'})
+    writer.writerow({'first_name': 'Lovely', 'last_name': 'Spam'})
+    writer.writerow({'first_name': 'Wonderful', 'last_name': 'Spam'})
+
+
+#--------------------------- yaml 文件操作
+
+读取yaml文件：
+
+1.先打开文件
+fr = open('文件路径','r')            代表以read的方式打开这个yaml文件
+
+2.读取文件
+yaml.load(fr)
+
+
+写入yaml文件：
+
+1.打开文件
+fr = open('文件路径','w')             代表以write的形式打开文件,如果要以添加的形式，只需要把w换成a
+
+2.写入文件
+data ={'user_info':{'name':A, 'age':17}}
+yaml.dump(data,fr)
+
+清空yaml文件：
+fr.truncate（）
+
+PS：所有针对yaml文件操作过后，建议关闭yaml文件：fr.close（）
+
+
+
